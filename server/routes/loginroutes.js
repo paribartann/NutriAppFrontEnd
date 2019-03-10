@@ -1,6 +1,7 @@
 //we create mysql connection using specifying the database of choice:
 
 var mysql = require('mysql');
+
 var connection = mysql.createConnection(
 
     {
@@ -11,16 +12,20 @@ var connection = mysql.createConnection(
 
     }
 );
-connection.connect( (err) => {
-    if(!err) {
-        console.log("Database is connected ...");
-    }
-    else
-    {
-        console.log("Database is not connected ...");
-    }
 
-});
+
+exports.connect = () => {
+    connection.connect( (err) => {
+        if(!err) {
+            console.log("Database is connected ...");
+        }
+        else
+        {
+            console.log("Database is not connected ...");
+        }
+
+    });
+}
 
 //creating handler for user registration
 exports.register = (req, res) => {
@@ -28,10 +33,11 @@ exports.register = (req, res) => {
 
     var today = new Date();
     var users = {
-        "first_name":req.body.first_name,
-        "last_name":req.body.last_name,
+        "first_name":req.body.fname,
+        "last_name":req.body.lname,
         "email":req.body.email,
         "password":req.body.password,
+        "username":req.body.username,
         "created":today,
         "modified":today
     }
@@ -63,10 +69,11 @@ exports.register = (req, res) => {
 
 exports.login = (req, res) => {
 
-    var email = req.body.email;
+    var username = req.body.username;
     var password = req.body.password;
 
-    connection.query('SELECT * FROM users WHERE email = ?', [email], (error, results, fields) => {
+    connection.query('SELECT * FROM users WHERE username = ?', [username], (error, results, fields) => {
+
         if (error) {
             // console.log("error ocurred",error);
             res.send({
@@ -75,26 +82,29 @@ exports.login = (req, res) => {
              });
         }
          else {
-            // console.log('The solution is: ', results);
+            console.log('The solution is: ', results);
             if(results.length >0){
-                if(results[0].password == password){
+                if(results[0].password === password){
+                    console.log("Login Succesful")
                     res.send({
-                        "code":200,
-                        "success":"login sucessfull"
+                        "code" : 200,
+                        "success" : "login sucessfull"
                     });
                 }
                 else{
+                    console.log("Login Failure")
                     res.send({
-                        "code":204,
-                        "success":"Email and password does not match"
+                        "code" : 204,
+                        "success" : "Email and password does not match"
                      });
                  }
             }
             else
             {
+                console.log("No Account")
                 res.send({
-                    "code":204,
-                    "success":"Email does not exits"
+                    "code" : 204,
+                    "success" : "Email does not exits"
                 });
             }
 
