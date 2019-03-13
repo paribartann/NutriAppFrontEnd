@@ -7,8 +7,8 @@ var connection = mysql.createConnection(
     {
         host : 'localhost',
         user : 'root',
-        password: 'password',
-        database: 'login'
+        password: 'database123!',
+        database: 'users'
 
     }
 );
@@ -21,7 +21,7 @@ exports.connect = () => {
         }
         else
         {
-            console.log("Database is not connected ...");
+            console.log("Database is not connected ...",err);
         }
 
     });
@@ -53,7 +53,7 @@ exports.register = (req, res) => {
         }
         else
         {
-            console.log('The solution is: ', results);
+            
             res.send({
             "code" : 200,
             "success" : "user registered sucessfully"
@@ -90,12 +90,13 @@ exports.login = (req, res) => {
                         "code" : 200,
                         "success" : "login sucessfull"
                     });
+                    
                 }
                 else{
                     console.log("Login Failure")
                     res.send({
                         "code" : 204,
-                        "success" : "Email and password does not match"
+                        "success" : "Username and Password does not match"
                      });
                  }
             }
@@ -103,7 +104,7 @@ exports.login = (req, res) => {
             {
                 console.log("No Account")
                 res.send({
-                    "code" : 204,
+                    "code" : 205,
                     "success" : "Email does not exits"
                 });
             }

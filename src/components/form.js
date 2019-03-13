@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const { Option } = Select;
 
+const API = 'http://localhost:3001/getValues';
+
  class Formcomponent extends Component {
   
   constructor(props) {
@@ -20,30 +22,47 @@ const { Option } = Select;
         }
 
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.fetchValues = this.fetchValues.bind(this);
       }
 
       handleFormSubmit = (e) => {
 
         e.preventDefault();
-        console.log(this.state.gender);
-        console.log(this.state.age);
-        console.log(this.state.weight);
-        console.log(this.state.height);
-        console.log(this.state.bmi);
+    
+        this.fetchValues();
       
         this.setState( {age:''} )
         this.setState( {height:''} )
         this.setState( {weight:''} )
         this.setState( {bmi:''} )
-       
-      
 
       }
-
-
+      
       handleSelectChange = (value) => {
         console.log("Handle State Change ") 
         this.setState({gender: value});
+      }
+
+
+      fetchValues(){
+        let data = {
+           gender: this.state.gender,
+           age: this.state.age, 
+           height: this.state.height,
+           weight: this.state.weight,
+           bmi: this.state.bmi
+
+        }
+
+        fetch(API, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type' : 'application/json'
+          }
+        }).then(res => res.json())
+        .then(response => console.log('Success:', JSON.stringify(response)))
+        .catch(error => console.error('Error:', error));
       }
     
   render() {

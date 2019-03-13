@@ -33,9 +33,18 @@ app.post('/register',(req,res)=>{
 
 app.post('/login',(req,res)=>{
     console.log("Got something from client!",req.body);
+  
     
     //console.log("Name",req.body.data.fname)
     databaseUtils.login(req, res);
+
+})
+
+
+app.post('/getValues', (req, res) => {
+
+    console.log("Getting requirements for the user!");
+    console.log(req.body);
 })
 
 app.use((req, res, next) => {

@@ -64,14 +64,18 @@ const TabPane = Tabs.TabPane;
          }).then(res =>  res.json() )
          .then( data => {
             console.log(data)
-            if (data.code == "200")
+            if (data.code === 200)
             {
               console.log('here!')
               this.props.history.push('/welcomePage');
              }
+            else if (data.code === 204)
+            {
+              console.log('Email and password do not match');
+            }
             else
             {
-
+              console.log("no account exits");
             }
          })
          .catch(error => console.error('Error:', error));
